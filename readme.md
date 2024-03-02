@@ -1,6 +1,6 @@
-Improved version of [RealWorld](https://github.com/gothinkster/realworld)
+Different version of [RealWorld](https://github.com/gothinkster/realworld)
 
-Fixed uncoupling between Domain and DTO models
+Uncoupling between Domain and DTO models
 
 ## How it works
 
