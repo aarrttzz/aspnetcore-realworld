@@ -15,8 +15,10 @@ public class DBContextTransactionPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
 {
     private readonly ConduitContext _context;
-
-    public DBContextTransactionPipelineBehavior(ConduitContext context) => _context = context;
+    public DBContextTransactionPipelineBehavior(ConduitContext context)
+    {
+        _context = context;
+    } 
 
     public async Task<TResponse> Handle(
         TRequest request,

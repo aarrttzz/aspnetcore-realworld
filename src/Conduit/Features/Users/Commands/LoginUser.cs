@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using Conduit.Domain.Events;
 using Conduit.DTO;
 using Conduit.Infrastructure;
 using Conduit.Infrastructure.Errors;
@@ -34,18 +35,21 @@ public class LoginUser
         private readonly IPasswordHasher _passwordHasher;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IMapper _mapper;
+        private readonly IPublisher _publisher;
 
         public Handler(
             ConduitContext context,
             IPasswordHasher passwordHasher,
             IJwtTokenGenerator jwtTokenGenerator,
-            IMapper mapper
+            IMapper mapper,
+            IPublisher publisher
         )
         {
             _context = context;
             _passwordHasher = passwordHasher;
             _jwtTokenGenerator = jwtTokenGenerator;
             _mapper = mapper;
+            _publisher = publisher;
         }
 
         public async Task<UserDto> Handle(
@@ -83,6 +87,9 @@ public class LoginUser
             user.Token = _jwtTokenGenerator.CreateToken(
                 person.Username ?? throw new InvalidOperationException()
             );
+
+            await _publisher.Publish(new UserLoginedEvent(person));
+
             return user;
         }
     }
